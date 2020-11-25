@@ -1,4 +1,4 @@
-This folder contains a JMeter load test, Sakai-Load-Test-With-Submit.jmx, that will publish an Assignment, Forum message, and Samigo question for each student provided in the usersFile
+This folder contains a JMeter load test, Sakai-Load-Test-With-Submit.jmx, that will submit an Assignment, Forum message, and Samigo question for each student provided in the usersFile
 
 It also contains php scripts to setup your students and courses to be used in the load test.  There is also a Sakai-Load-Test-Publish-Samigo.jmx file that will be
 run to publish the samigo tests that the php script initially set up.
