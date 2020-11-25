@@ -1,0 +1,56 @@
+This folder contains a JMeter test that will login as admin then 'become user' for each of the users in the provided usersFile.
+The test will click each of the user's favorited site tabs. Then for each site, it will click on each of that's site's tools.
+
+When launching the test you may adjust the numberOfUsers, requestDelay, and rampUp to affect the number of active (simultaneous) users
+during the test.  Also be sure that the numberOfUsers is equal to or less than the number of users in your usersFile.
+
+- create a csv file containing a list of users
+
+To Run The Load test:
+
+- Do NOT run the full load test via the JMeter UI
+  (only use it for debugging small number of threads)
+- Increate your jmeter heap
+    - edit /apache-jmeter-3.3/bin/jmeter
+    - set the heap space.  e.g.  
+    
+HEAP="-Xms512m -Xmx2048m" 
+
+- Run jmeter from the command line:
+
+$ <path-to-jmeter>/jmeter -n -t ~/Projects/hawaii-sakai/[NN.N]/trunk/jmeter-scripts/Sakai-Load-Test-Sites-And-Menus.jmx.jmx
+
+    Required Options
+    -Jprotocol=<http|https>
+    -JserverName=<serverName>
+    -JusersFile=<path-to-csv-file>
+    -JnumberOfUsers=<number-of-users-to-test>
+    -JadminUserName=<admin-username>
+    -JadminPassword=<admin-password>
+
+    Optional Options
+    -Jport=<port>
+    -JportDelimiter=:
+    -Jloopcount=<loop-count(default 1)>
+    -JrequestDelay=<3000>
+    -JrampUp=<580>
+    -JresultsPath=<path>                // must enable View Results Tree in .jmx
+    -JresultsTreeFileName=<filename>    // must enable View Results Tree in .jmx
+
+-n don't start up the jmeter UI
+-t path to jmx file
+
+
+Example Queries to get a list of users
+
+// 1000 users
+select b.eid from sakai_session as a left join sakai_user_id_map as b on a.session_user = b.user_id left join sakai_user as c on b.user_id = c.user_id where a.session_start > '<yyyy-MM-dd HH:mm:ss>' and a.session_start < '<yyyy-MM-dd HH:mm:ss>' and c.user_id is not null group by a.session_user order by a.session_start desc limit 1000;
+
+
+After retrieving a list of users from one of the queries above,
+create a .csv file with each username on a separate line, no commas
+
+username
+username
+username
+username

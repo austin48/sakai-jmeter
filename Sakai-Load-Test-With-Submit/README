@@ -1,0 +1,121 @@
+This folder contains a JMeter load test, Sakai-Load-Test-With-Submit.jmx, that will publish an Assignment, Forum message, and Samigo question for each student provided in the usersFile
+
+It also contains php scripts to setup your students and courses to be used in the load test.  There is also a Sakai-Load-Test-Publish-Samigo.jmx file that will be
+run to publish the samigo tests that the php script initially set up.
+
+When launching the test you may adjust the numberOfUsers, requestDelay, and rampUp to affect the number of active (simultaneous) users
+during the test.  Also be sure that the numberOfUsers is equal to or less than the number of users in your usersFile.
+
+##### !!! IMPORTANT !!! #####
+
+    - After running the test or before running another test, it is recommended that you run
+
+        $ php delete_all_sites_and_students.php  --totalstudents=<num-students>
+
+      because without it, if you re-run the jmeter test, it will fail on one of the "Assignment Steps"
+      because the assignment is NOT set to "unlimited" retries.
+
+#############################
+
+Setup Users, Sites, Tools, and assignments.
+
+- login to Sakai as admin and create a "course" site called e.g. JMETER_COURSE_TEMPLATE
+    - add the Samigo tool
+    - create one new assessment named "Quiz 1"
+    - add TWO "multiple choice" questions to the quiz.
+
+- edit sakai-ws-scripts/init.php
+    - configure the following
+        $JMETER_PATH = <path-to-jmeter>/bin/jmeter
+        $JMETER_RUN_PATH = <path-to-jmeter-run-directory>
+        $JMETER_SAMIGO_PUBLISH_PATH = <path-to-samigo-publish-script>/Publish-Samigo.jmx
+        $JMETER_SITES_FILE = <path-to-sites-file>/sites.csv
+
+- run the command
+
+        $ php create_all_sites_and_students.php
+
+        Parameters (required)
+            --totalstudents=500
+            --totalsites=20
+            --studentspersite=25
+            --studentpwd=<pwd>
+
+        Parameters (optional, if jmeter is installed on Sakai server)
+            --publishsamigo=<true|false(default)>
+            --protocol=<protocol>
+            --serverName=<serverName>
+            --port=<port>
+            --portDelimiter=<portDelimiter>
+            --requestDelay=<1000>
+            --sitesFile=<resultsPath>
+            --resultsPath=<resultsPath>             // must enable View Results Tree in .jmx
+            --resultsFileName=<resultsFileName>     // must enable View Results Tree in .jmx
+            --adminusername=<username>
+            --adminpassword=<pwd>
+
+- this will print the results to the screen, including a section of student eids.
+- copy those student eids and create a file called "usersFile.csv", containing those eids
+- if you are running this command on a different server than the server that you will run jmeter copy the usersFile.csv to that server
+
+- this command will also create a file for the path given in --sitesFile.
+- if you are running this command on a different server than the server that you will run jmeter copy the sitesFile to that server
+
+#############################
+
+Publish Samigo assignments (this step is optional if you used --publishsamigo=true in the step above)
+
+If you did NOT set --publishsamigo=true in the above section, then you must run the publish samigo scrpt manually
+
+    $ cd Desktop
+    $ <path-to-jmeter/bin/jmeter -n -t <path-to-samigo-publish-script>/Publish-Samigo.jmx
+
+    Parameters (required)
+        -Jprotocol=<protocol>
+        -JserverName=<serverName>
+        -JsitesFile=<resultsPath>
+        -JnumberOfSites=<numberOfSites>
+        -Jadminusername=<username>
+        -Jadminpassword=<pwd>
+
+    Parameters (optional)
+        -Jport=<port>
+        -JportDelimiter=<portDelimiter>
+        -JrequestDelay=<1000>
+        -JresultsPath=<resultsPath>             // must enable View Results Tree in .jmx
+        -JresultsFileName=<resultsFileName>     // must enable View Results Tree in .jmx
+
+#############################
+
+To Run The Load test:
+
+- Do NOT run the full load test via the JMeter UI
+  (only use it for debugging small number of threads)
+- Increate your jmeter heap
+    - edit /apache-jmeter-3.3/bin/jmeter
+    - set the heap space.  e.g. HEAP="-Xms512m -Xmx2048m" 
+
+- Run jmeter from the command line:
+
+    $ cd Desktop
+    $ <path-to-jmeter>/jmeter -n -t <path to jmx file>/Sakai-Load-Test-With-Submit.jmx
+
+    Parameters (required)
+        -Jprotocol=<protocol>
+        -JserverName=<serverName>
+        -JusersFile=<usersFile>
+        -JuserPassword=<userPassword>
+        -JnumberOfUsers=<1000>
+
+    Parameters (optional)
+        -Jport=<port>
+        -JportDelimiter=<portDelimiter>
+        -JrequestDelay=<10000>
+        -JrampUp=<500>
+        -JresultsPath=<resultsPath>             // must enable View Results Tree in .jmx
+        -JresultsFileName=<resultsFileName>     // must enable View Results Tree in .jmx
+
+    - notes
+        - jmeter options
+            -n      don't start up the jmeter UI
+            -t      path to jmx file
