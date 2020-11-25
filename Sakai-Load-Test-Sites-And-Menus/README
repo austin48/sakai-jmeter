@@ -1,5 +1,5 @@
 This folder contains a JMeter test that will login as admin then 'become user' for each of the users in the provided usersFile.
-The test will click each of the user's favorited site tabs. Then for each site, it will click on each of that's site's tools.
+The test will click each of the user's favorited site tabs. Then for each site, it will click on each of that site's tools.
 
 When launching the test you may adjust the numberOfUsers, requestDelay, and rampUp to affect the number of active (simultaneous) users
 during the test.  Also be sure that the numberOfUsers is equal to or less than the number of users in your usersFile.
