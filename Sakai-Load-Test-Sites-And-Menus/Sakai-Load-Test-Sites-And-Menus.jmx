@@ -73,13 +73,13 @@
           </elementProp>
           <elementProp name="resultsPath" elementType="Argument">
             <stringProp name="Argument.name">resultsPath</stringProp>
-            <stringProp name="Argument.value">${__P(resultsPath,)}</stringProp>
+            <stringProp name="Argument.value">${__P(resultsPath,/tmp)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">path</stringProp>
           </elementProp>
           <elementProp name="resultsTreeFileName" elementType="Argument">
             <stringProp name="Argument.name">resultsTreeFileName</stringProp>
-            <stringProp name="Argument.value">${__P(resultsTreeFileName,)}</stringProp>
+            <stringProp name="Argument.value">${__P(resultsTreeFileName,ResultsTreeSitesNav.log)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <stringProp name="Argument.desc">filename</stringProp>
           </elementProp>

@@ -45,12 +45,12 @@
           </elementProp>
           <elementProp name="resultsPath" elementType="Argument">
             <stringProp name="Argument.name">resultsPath</stringProp>
-            <stringProp name="Argument.value">${__P(resultsPath,)}</stringProp>
+            <stringProp name="Argument.value">${__P(resultsPath,/tmp)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="resultsFileName" elementType="Argument">
             <stringProp name="Argument.name">resultsFileName</stringProp>
-            <stringProp name="Argument.value">${__P(resultsFileName,)}</stringProp>
+            <stringProp name="Argument.value">${__P(resultsFileName,ResultsTreeSubmit.log)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="requestDelay" elementType="Argument">
